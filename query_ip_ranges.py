@@ -1,5 +1,11 @@
 import json
 import ipaddress
+import requests
+
+url = "https://ip-ranges.amazonaws.com/ip-ranges.json"
+response = requests.get(url)
+
+
 
 with open('ip-ranges.json') as file:
     data = json.load(file)   
@@ -28,15 +34,46 @@ else:
         "ROUTE53", "ROUTE53_HEALTHCHECKS", "ROUTE53_HEALTHCHECKS_PUBLISHING", 
         "ROUTE53_RESOLVER", "S3", "WORKSPACES_GATEWAYS"
     ]
+
+    aws_regions = [
+    "us-east-1",
+    "us-east-2",
+    "us-west-1",
+    "us-west-2",
+    "af-south-1",
+    "ap-east-1",
+    "ap-south-1",
+    "ap-northeast-1",
+    "ap-northeast-2",
+    "ap-northeast-3",
+    "ap-southeast-1",
+    "ap-southeast-2",
+    "ca-central-1",
+    "cn-north-1",
+    "cn-northwest-1",
+    "eu-central-1",
+    "eu-west-1",
+    "eu-west-2",
+    "eu-west-3",
+    "eu-north-1",
+    "eu-south-1",
+    "me-south-1",
+    "sa-east-1",
+]
+
     print("\nAvailable AWS services:")
     for service in services:
         print(service)
     
     chosen_service = input("\nEnter the AWS service you want to search for: ").strip().upper()
-    
-    if chosen_service in services:
+    chosen_region = input('What region?:')
+    if chosen_service in services and chosen_region in aws_regions:
         for i in data['prefixes']:
-            if 'service' in i and i['service'] == chosen_service:
+            if 'service' in i and i['service'] == chosen_service and 'region' in i and i['region'] == chosen_region:
+                
                 print(i)
+                
+            
+                
     else:
         print("Invalid service chosen.")
